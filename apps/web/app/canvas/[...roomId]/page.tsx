@@ -1,4 +1,5 @@
 import MainCanvas from "../../components/mainacanvas"
+import ProxyCanvas from "../../components/proxyCanvas"
 
 export default async function CanvasPage({params}: {
     params : {
@@ -8,6 +9,6 @@ export default async function CanvasPage({params}: {
 
     const roomId = (await params).roomId
     return <div>
-        <MainCanvas roomId={roomId}/>
+        <ProxyCanvas roomId={roomId}/>
     </div>
 }
