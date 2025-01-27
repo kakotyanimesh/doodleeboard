@@ -64,9 +64,10 @@ wss.on("connection", (ws, req) => {
                     })
 
                     usersArray.forEach((user) => {
-                        if(user.room.includes(roomId) && user.ws !== ws){
+                        if(user.room.includes(roomId)){
                             user.ws.send(JSON.stringify({
                                 type : "draw",
+                                roomId : Number(roomId),
                                 message : message
                             }))
                         }

@@ -1,9 +1,11 @@
 "use client"
 
+import { Circle,RectangleHorizontal, PencilLine, Baseline } from 'lucide-react';
 import { useEffect, useRef, useState } from "react"
 import { Game } from "../../draw/game"
 import { matchesGlob } from "path"
 import { selectedToolType } from "../../draw/types"
+import { GameLogic } from "../../draw/gamelogic"
 
 
 export type toolType = "circle" | "rect"
@@ -14,43 +16,66 @@ export default function MainCanvas({roomId, ws} : {
 }) {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
-    const gameRef = useRef<Game | null>(null)
-    const [selectedTool, setselectedTool] = useState<toolType>("rect")
-
-
-    useEffect(() => {
-      gameRef.current?.setTool(selectedTool)
+    const gameRef = useRef<GameLogic |null>(null)
+    const [selectedtool, setselectedtool] = useState<selectedToolType>("circle")
+    // const [windowWidth, setWindowWidth] = useState({width : window.innerWidth, height : window.innerHeight})
     
+    useEffect(() => {
       
-      
-    }, [selectedTool])
+    
+      gameRef.current?.setTool(selectedtool)
+    }, [selectedtool])
 
     useEffect(() => {
       const canvas = canvasRef.current
 
-      if(canvas){
-        const g = new Game(canvas)
+      if(canvas && ws){
+        const g = new GameLogic(canvas, roomId, ws)
         gameRef.current = g
 
         g.mouseHandlers()
 
-        return () =>{
-            g.cleanUp()
+        g.drawExistingShapes()
+
+        // g.handlewebsoketmessage()
+        
+        return () => {
+          g.clearCanvas()
+
+          // ws.send(JSON.stringify({
+          //   type : "leave",
+          //   roomId : roomId
+          // }))
         }
       }
-      
-    }, [canvasRef])
-    
+    }, [ws, roomId])
     
    
     
+    // useEffect(() => {
+
+    //   const handleResize = () => {
+    //     setWindowWidth({width : window.innerWidth, height : window.innerHeight})
+    //   }
+    //   window.addEventListener("resize", handleResize)
+    
+    //   return () => {
+    //     window.removeEventListener("resize", handleResize)
+    //   }
+    // }, [windowWidth])
+    
+
 
     return (
-        <div>
-            <div className="fixed bg-yellow-300 flex flex-rw gap-7">
-                <button onClick={() => setselectedTool("circle")}>circle</button>
-                <button onClick={() => setselectedTool("rect")}>rect</button>
+        <div className="">
+            <div className="fixed  right-10">
+              <div className="flex flex-row gap-6 py-2 px-3">
+                <button className={`px-3 py-2 rounded-md ${selectedtool === "circle" ? "bg-blue-600 ": "bg-gray-200"}`} onClick={() => setselectedtool("circle")}><Circle/></button>
+                <button className={`px-3 py-2 rounded-md ${selectedtool === "rect" ? "bg-blue-600" : "bg-gray-200"}`} onClick={() => setselectedtool("rect")}><RectangleHorizontal/></button>
+                <button className={`px-3 py-2 rounded-md ${selectedtool === "pencil" ? "bg-blue-600" : "bg-gray-200"}`} onClick={() => setselectedtool("pencil")}><PencilLine/></button>
+                <button className={`px-3 py-2 rounded-md ${selectedtool === "text" ? "bg-blue-600" : "bg-gray-200"}`} onClick={() => setselectedtool("text")}><Baseline/></button>
 
+              </div>
             </div>
             <canvas width={window.innerWidth} height={window.innerHeight} ref={canvasRef}></canvas>
             
