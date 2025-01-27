@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Game } from "../../draw/game"
 import { matchesGlob } from "path"
-import { selectedShpeType } from "../../draw/types"
+import { selectedToolType } from "../../draw/types"
 
 
 export type toolType = "circle" | "rect"
@@ -15,14 +15,18 @@ export default function MainCanvas({roomId, ws} : {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const gameRef = useRef<Game | null>(null)
-    const [selcetedShape, setselcetedShape] = useState<selectedShpeType>("rect")
+    const [selectedTool, setselectedTool] = useState<toolType>("rect")
 
+
+    useEffect(() => {
+      gameRef.current?.setTool(selectedTool)
     
+      
+      
+    }, [selectedTool])
 
     useEffect(() => {
       const canvas = canvasRef.current
-      
-      
 
       if(canvas){
         const g = new Game(canvas)
@@ -30,38 +34,22 @@ export default function MainCanvas({roomId, ws} : {
 
         g.mouseHandlers()
 
-
-
-        return () => {
+        return () =>{
             g.cleanUp()
         }
-
-        
       }
       
-      
     }, [canvasRef])
-
-    useEffect(() => {
-        
-        if(gameRef.current){
-            gameRef.current.setShapeType(selcetedShape)
-        }
-    
-    }, [selcetedShape])
     
     
-    // if(!ws){
-    //     return <div>
-    //         connnectting .....
-    //     </div>
-    // }
+   
+    
 
     return (
         <div>
             <div className="fixed bg-yellow-300 flex flex-rw gap-7">
-                <button onClick={() => setselcetedShape("circle")}>circle</button>
-                <button onClick={() => setselcetedShape("rect")}>rect</button>
+                <button onClick={() => setselectedTool("circle")}>circle</button>
+                <button onClick={() => setselectedTool("rect")}>rect</button>
 
             </div>
             <canvas width={window.innerWidth} height={window.innerHeight} ref={canvasRef}></canvas>

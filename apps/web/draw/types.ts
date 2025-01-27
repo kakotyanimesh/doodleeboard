@@ -11,4 +11,4 @@ export type ShapesType = {
     radius: number
 }
 
-export type selectedShpeType = "rect" | "circle"
+export type selectedToolType = "rect" | "circle"
