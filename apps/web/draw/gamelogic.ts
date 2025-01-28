@@ -12,7 +12,10 @@ export class GameLogic{
     private startx : number = 0
     private starty : number = 0
     private isDraw : boolean = false
-
+    private textArea : HTMLTextAreaElement | null = null
+    private textAreaRef : {current : HTMLTextAreaElement | null} = {current : null}
+    // private fontsStyle 
+ 
     private roomId : string
     private ws : WebSocket
     constructor(canvas : HTMLCanvasElement, roomId : string, ws : WebSocket){
@@ -29,18 +32,23 @@ export class GameLogic{
 
     handlewebsoketmessage (){
         this.ws.onmessage = (event : MessageEvent) => {
-            const data = JSON.parse(event.data)
-
-            // console.log(data);
-            
-            if(data.type === "draw"){
-                const newShape = JSON.parse(data.message)
-                // console.log(newShape + "new shaape");
+            try {
+                const data = JSON.parse(event.data)
+    
+                // console.log(data);
                 
-
-                this.existingShape.push(newShape)
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-                this.drawAllShapes()
+                if(data.type === "draw"){
+                    const newShape = JSON.parse(data.message)
+                    // console.log(newShape + "new shaape");
+                    
+    
+                    this.existingShape.push(newShape)
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+                    this.drawAllShapes()
+                }
+            } catch (error) {
+                console.log(`error while parsing websoket message : ${error}`);
+                
             }
         }
     }
@@ -49,6 +57,14 @@ export class GameLogic{
         this.selectedTool = tool
     }
 
+
+    // font function
+
+    
+      
+ 
+
+    
     private drawShape(shape: ShapesType){
         if(shape.type === "rect"){
             this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
@@ -61,8 +77,14 @@ export class GameLogic{
             this.ctx.moveTo(shape.startX, shape.startY)
             this.ctx.lineTo(shape.endX, shape.endY)
             this.ctx.stroke()
-        } else if(shape.type === "text"){
-            this.ctx.font = "16px Arial"
+        } 
+        else if(shape.type === "text"){
+            // const myFont = new FontFace("myFont", 'url(public/fonts/fontOne.woff2')
+
+            // myFont.load().then((font) => {
+            //     document.fonts.add(font)
+            // })
+            this.ctx.font = "20px Courier New"
             this.ctx.fillText(shape.content, shape.startX, shape.startY)
         }
     }
@@ -76,55 +98,97 @@ export class GameLogic{
     }
 
 
+    private createTextArea(x : number, y : number) {
+        if(this.textArea){
+            document.body.removeChild(this.textArea)
+        }
+
+        const canvasRect = this.canvas.getBoundingClientRect()
+
+        const pageX = x + canvasRect.left
+        const pageY = y + canvasRect.top
+        
+        console.log(x);
+        console.log(y);
+
+        
+
+        this.textArea = document.createElement("textarea")
+        this.textArea.style.position = "absolute"
+        this.textArea.style.top = `${pageY}px`
+        this.textArea.style.left = `${pageX}px`
+        this.textArea.style.resize = "none"
+        this.textArea.style.outline = "none"
+        this.textArea.style.zIndex = "1000"
+        this.textArea.style.fontSize = "26px";
+        this.textArea.style.color = "black";
+        
+
+
+        document.body.appendChild(this.textArea)
+
+        this.textAreaRef.current = this.textArea
+
+        setTimeout(() => {
+            if(this.textAreaRef.current){
+                this.textAreaRef.current.focus()
+            }
+        }, 0);
+        // this.textArea.focus()
+        
+
+
+        // event listner for user input
+
+        this.textArea.addEventListener("blur", () => {
+            const text = this.textArea?.value
+
+            document.body.removeChild(this.textArea!)
+
+            this.textArea = null
+            this.textAreaRef.current = null
+
+            if(text){
+                const shape : ShapesType = {
+                    type : "text",
+                    content : text,
+                    startX : x,
+                    startY : y
+                }
+
+                this.existingShape.push(shape)
+
+                this.ws.send(JSON.stringify({
+                    type : "draw",
+                    roomId : Number(this.roomId),
+                    message : JSON.stringify(shape)
+                }))
+
+                this.drawAllShapes()
+            }
+        })
+
+
+        this.textArea.addEventListener("keydown", (e) => {
+            if(e.key === "Tab"){
+                e.preventDefault()
+                this.textArea?.blur()
+            }
+        })
+    }
+
     mouseDown = (e : MouseEvent) => {
-        this.isDraw = true
+        
         this.startx = e.clientX - this.canvas.offsetLeft
         this.starty = e.clientY - this.canvas.offsetTop
 
         if(this.selectedTool === "text"){
-            const input = document.createElement("input")
-            input.type = "text"
-            input.style.top = `${this.starty}px`
-            input.style.left = `${this.startx}px`
-            input.style.backgroundColor = "black"
-
-
-            document.body.appendChild(input)
-
-            input.focus()
-
-            input.addEventListener("blur", () => {
-                const text = input.value
-                document.body.removeChild(input)
-
-                if(text){
-                    const shape : ShapesType = {
-                        type : "text",
-                        content : text,
-                        startX : this.startx,
-                        startY : this.starty
-                    }
-                    this.existingShape.push(shape)
-
-                    this.ws.send(JSON.stringify({
-                        type : "draw",
-                        roomId : Number(this.roomId),
-                        message : JSON.stringify(shape)
-                    }))
-                }
-                
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-                this.drawAllShapes()
-            })
-
-            
-
-            input.addEventListener("keydown", (event) => {
-                if (event.key === "Enter") {
-                    input.blur(); // Trigger blur to complete input
-                }
-            });
+            this.createTextArea(this.startx, this.starty)
+        } else {
+            this.isDraw = true
         }
+
+        
     }
 
     mouseMove = (e : MouseEvent) => {

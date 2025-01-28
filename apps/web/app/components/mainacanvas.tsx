@@ -17,7 +17,7 @@ export default function MainCanvas({roomId, ws} : {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const gameRef = useRef<GameLogic |null>(null)
-    const [selectedtool, setselectedtool] = useState<selectedToolType>("circle")
+    const [selectedtool, setselectedtool] = useState<selectedToolType>("rect")
     // const [windowWidth, setWindowWidth] = useState({width : window.innerWidth, height : window.innerHeight})
     
     useEffect(() => {
@@ -26,6 +26,8 @@ export default function MainCanvas({roomId, ws} : {
       gameRef.current?.setTool(selectedtool)
     }, [selectedtool])
 
+    // console.log(gameRef.current?.getX);
+    
     useEffect(() => {
       const canvas = canvasRef.current
 
@@ -77,6 +79,7 @@ export default function MainCanvas({roomId, ws} : {
 
               </div>
             </div>
+            
             <canvas width={window.innerWidth} height={window.innerHeight} ref={canvasRef}></canvas>
             
         </div>
