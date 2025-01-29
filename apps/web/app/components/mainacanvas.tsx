@@ -19,7 +19,7 @@ export default function MainCanvas({roomId, ws} : {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const gameRef = useRef<GameClass | null>(null)
     const [selectedtool, setselectedtool] = useState<selectedToolType>("rect")
-    const [bgcolor, setBgcolor] = useState<bgColor>("transparent")    
+    const [bgcolor, setBgcolor] = useState<bgColor>("black")    
 
     useEffect(() => {
       

@@ -32,5 +32,5 @@ export type selectedToolType = "rect" | "circle" | "pencil" | "text"
 // }
 
 
-export type bgColor = "white" | "blue" | "green" | "yellow" | "red" | "transparent"
+export type bgColor = "white" | "blue" | "green" | "yellow" | "red" | "black"
 

@@ -9,7 +9,7 @@ export class GameClass{
     private ctx : CanvasRenderingContext2D
     private roomId : string
     private selectedTool : selectedToolType = "rect"
-    private selecteColor : bgColor = "transparent"
+    private selecteColor : bgColor = "black"
     private existingShapes : ShapesType[] = []
     private startX : number = 0
     private startY : number = 0
@@ -61,22 +61,18 @@ export class GameClass{
         this.ctx.strokeStyle = "white"
         if(shape.type === "rect"){
             // this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
-            shape.style === "transparent" 
-                ?
-                    this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
-                : 
+            
                     this.ctx.fillStyle = `${shape.style}`
                     this.ctx.fillRect(shape.x, shape.y, shape.width, shape.height)
+            // this.ctx.strokeRect(this.startX, this.startY, shape.width, shape.height/) 
+
         } else if (shape.type === "circle"){
             this.ctx.beginPath()
             this.ctx.arc(shape.centerX, shape.centerY, shape.radius, 0, Math.PI * 2)
             // this.ctx.stroke()
-            shape.style === "transparent"
-                ?
-                    this.ctx.stroke()
-                :
-                    this.ctx.fillStyle = `${shape.style}`
-                    this.ctx.fill()
+            
+            this.ctx.fillStyle = `${shape.style}`
+            this.ctx.fill()
         } else if (shape.type === "pencil"){
             this.ctx.beginPath()
             this.ctx.moveTo(shape.startX, shape.startY)
@@ -120,18 +116,15 @@ export class GameClass{
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.drawALLShapes()
-            this.selecteColor === "transparent" ? this.ctx.strokeStyle === "white" : this.ctx.fillStyle = `${this.selecteColor}`
-            // this.ctx.strokeStyle = "white" 
+            this.ctx.fillStyle = `${this.selecteColor}`
+            this.ctx.strokeStyle = "white" 
             // this.ctx.fillStyle = "white"
             if(this.selectedTool === "rect"){
                 
 
                 // this.ctx.fillRect(this.startX, this.startY, width, height) //==> use when we want to fill the color of the rect 
-                this.selecteColor === "transparent"  
-                    ? 
-                        this.ctx.strokeRect(this.startX, this.startY, width, height) 
-                    : 
-                        this.ctx.fillRect(this.startX, this.startY, width, height) 
+            this.ctx.fillRect(this.startX, this.startY, width, height) 
+            // this.ctx.strokeRect(this.startX, this.startY, width, height) 
             } else if (this.selectedTool === "circle"){
                 const radius = Math.sqrt(
                     Math.pow(width, 2) + 
@@ -142,11 +135,7 @@ export class GameClass{
                 this.ctx.arc(this.startX, this.startY, radius, 0, Math.PI * 2)
                 // this.ctx.fill()  //=> to fill the color in circle 
                 // this.ctx.stroke()
-                this.selecteColor === "transparent" 
-                    ? 
-                        this.ctx.stroke()
-                    :
-                        this.ctx.fill()
+                this.ctx.fill()
             } else if (this.selectedTool === "pencil"){
                 this.ctx.beginPath()
                 this.ctx.moveTo(this.startX, this.startY)
@@ -179,7 +168,7 @@ export class GameClass{
                 y : this.startY,
                 width,
                 height,
-                style : this.selecteColor === "transparent" ? "transparent" : `${this.selecteColor}`
+                style : `${this.selecteColor}`
             }
         } else if (this.selectedTool === "circle"){
             shapesObject = {
@@ -187,7 +176,7 @@ export class GameClass{
                 centerX : this.startX,
                 centerY : this.startY,
                 radius,
-                style : this.selecteColor === "transparent" ? "transparent" : `${this.selecteColor}`
+                style : `${this.selecteColor}`
             }
         } else if ( this.selectedTool === "pencil"){
             shapesObject = {
