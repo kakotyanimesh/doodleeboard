@@ -3,12 +3,14 @@ export type ShapesType = {
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    style : string
 } | {
     type: "circle",
     centerX: number,
     centerY: number,
-    radius: number
+    radius: number,
+    style : string
 } | {
     type : "pencil",
     startX : number,
@@ -23,3 +25,12 @@ export type ShapesType = {
 }
 
 export type selectedToolType = "rect" | "circle" | "pencil" | "text"
+
+// export type styleType = {
+//     fillColor ? : string,
+//     strokeColor : string
+// }
+
+
+export type bgColor = "white" | "blue" | "green" | "yellow" | "red" | "transparent"
+
