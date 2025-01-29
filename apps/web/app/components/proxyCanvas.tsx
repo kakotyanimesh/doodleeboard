@@ -7,7 +7,7 @@ export default function ProxyCanvas({roomId} : {roomId : string}) {
     const [soket, setSoket] = useState<WebSocket | null>(null)
 
     useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjZTFhNTU1My05NjllLTRlMzAtOWUyZC1lOWYwNDg0ZDEzNjQiLCJpYXQiOjE3MzgwNjM2NzIsImV4cCI6MTczODA5OTY3Mn0.shxORNtbI2xNslDhC_8wVKmFAphldRAS9OQPAjsDVd8
+        const ws = new WebSocket(`ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzZTcwNDIyZi01MzIzLTQ4ODktYWIxNS01YjYwYTIxOGE5YjUiLCJpYXQiOjE3MzgxNjA0NTUsImV4cCI6MTczODE5NjQ1NX0.TPlX7_H1wD02E8VGKMdeM3ady23JsDhMdrm3uGwN88U
 `)
 
         ws.onopen = (e) => {

@@ -1,5 +1,4 @@
-import { Shapes } from "lucide-react"
-import { toolType } from "../app/components/mainacanvas"
+
 import { getShapesfromBackend } from "./http"
 import { selectedToolType, ShapesType } from "./types"
 

@@ -6,6 +6,7 @@ import { Game } from "../../draw/game"
 import { matchesGlob } from "path"
 import { selectedToolType } from "../../draw/types"
 import { GameLogic } from "../../draw/gamelogic"
+import { GameClass } from '../../draw/gamelogicV2';
 
 
 export type toolType = "circle" | "rect"
@@ -16,55 +17,35 @@ export default function MainCanvas({roomId, ws} : {
 }) {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
-    const gameRef = useRef<GameLogic |null>(null)
+    const gameRef = useRef<GameClass | null>(null)
     const [selectedtool, setselectedtool] = useState<selectedToolType>("rect")
-    // const [windowWidth, setWindowWidth] = useState({width : window.innerWidth, height : window.innerHeight})
     
+
     useEffect(() => {
       
-    
-      gameRef.current?.setTool(selectedtool)
+    gameRef.current?.setTool(selectedtool)
+      
     }, [selectedtool])
 
-    // console.log(gameRef.current?.getX);
-    
     useEffect(() => {
       const canvas = canvasRef.current
 
-      if(canvas && ws){
-        const g = new GameLogic(canvas, roomId, ws)
-        gameRef.current = g
+      if(canvas){
+        const g = new GameClass(canvas, roomId, ws)
+        gameRef.current =g
 
         g.mouseHandlers()
+        g.drawShapesFrombackend()
 
-        g.drawExistingShapes()
-
-        // g.handlewebsoketmessage()
-        
         return () => {
-          g.clearCanvas()
-
-          // ws.send(JSON.stringify({
-          //   type : "leave",
-          //   roomId : roomId
-          // }))
+          g.clearEvents()
         }
-      }
-    }, [ws, roomId])
-    
-   
-    
-    // useEffect(() => {
 
-    //   const handleResize = () => {
-    //     setWindowWidth({width : window.innerWidth, height : window.innerHeight})
-    //   }
-    //   window.addEventListener("resize", handleResize)
+      }
     
-    //   return () => {
-    //     window.removeEventListener("resize", handleResize)
-    //   }
-    // }, [windowWidth])
+      
+    }, [canvasRef])
+    
     
 
 
@@ -85,3 +66,57 @@ export default function MainCanvas({roomId, ws} : {
         </div>
     )
 }
+
+
+
+
+// const canvasRef = useRef<HTMLCanvasElement | null>(null)
+//     const gameRef = useRef<GameLogic |null>(null)
+//     const [selectedtool, setselectedtool] = useState<selectedToolType>("rect")
+//     // const [windowWidth, setWindowWidth] = useState({width : window.innerWidth, height : window.innerHeight})
+    
+//     useEffect(() => {
+      
+    
+//       gameRef.current?.setTool(selectedtool)
+//     }, [selectedtool])
+
+//     // console.log(gameRef.current?.getX);
+    
+//     useEffect(() => {
+//       const canvas = canvasRef.current
+
+//       if(canvas && ws){
+//         const g = new GameLogic(canvas, roomId, ws)
+//         gameRef.current = g
+
+//         g.mouseHandlers()
+
+//         g.drawExistingShapes()
+
+//         // g.handlewebsoketmessage()
+        
+//         return () => {
+//           g.clearCanvas()
+
+//           // ws.send(JSON.stringify({
+//           //   type : "leave",
+//           //   roomId : roomId
+//           // }))
+//         }
+//       }
+//     }, [ws, roomId])
+    
+   
+    
+//     // useEffect(() => {
+
+//     //   const handleResize = () => {
+//     //     setWindowWidth({width : window.innerWidth, height : window.innerHeight})
+//     //   }
+//     //   window.addEventListener("resize", handleResize)
+    
+//     //   return () => {
+//     //     window.removeEventListener("resize", handleResize)
+//     //   }
+//     // }, [windowWidth])
