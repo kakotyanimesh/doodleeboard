@@ -58,28 +58,34 @@ export class GameClass{
     }
 
     private drawShape (shape : ShapesType)  {
-        this.ctx.strokeStyle = "white"
         if(shape.type === "rect"){
             // this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
             
-                    this.ctx.fillStyle = `${shape.style}`
-                    this.ctx.fillRect(shape.x, shape.y, shape.width, shape.height)
+                    // this.ctx.fillStyle = `${shape.style}`
+        this.ctx.strokeStyle = shape.style
+
+                    this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height)
             // this.ctx.strokeRect(this.startX, this.startY, shape.width, shape.height/) 
 
         } else if (shape.type === "circle"){
+            this.ctx.strokeStyle = shape.style
+
             this.ctx.beginPath()
             this.ctx.arc(shape.centerX, shape.centerY, shape.radius, 0, Math.PI * 2)
-            // this.ctx.stroke()
+            this.ctx.stroke()
             
-            this.ctx.fillStyle = `${shape.style}`
-            this.ctx.fill()
+            // this.ctx.fillStyle = `${shape.style}`
+            // this.ctx.fill()
         } else if (shape.type === "pencil"){
+            this.ctx.strokeStyle = shape.style
             this.ctx.beginPath()
             this.ctx.moveTo(shape.startX, shape.startY)
             this.ctx.lineTo(shape.endX, shape.endY)
+            // this.drawArrow(this.ctx, this.startX, this.startY, shape.endX, shape.endY, 10)
             this.ctx.stroke()
+            this.ctx.closePath()
         } else if (shape.type === "text"){
-            this.ctx.fillStyle = "white"
+            this.ctx.fillStyle = `${shape.style}`
             this.ctx.font = "24px Arial",
             this.ctx.fillText(shape.content, shape.startX, shape.startY)
         }
@@ -116,30 +122,33 @@ export class GameClass{
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.drawALLShapes()
-            this.ctx.fillStyle = `${this.selecteColor}`
-            this.ctx.strokeStyle = "white" 
+            // this.ctx.fillStyle = `${this.selecteColor}`
+            
             // this.ctx.fillStyle = "white"
             if(this.selectedTool === "rect"){
-                
+                this.ctx.strokeStyle = `${this.selecteColor}` 
 
                 // this.ctx.fillRect(this.startX, this.startY, width, height) //==> use when we want to fill the color of the rect 
-            this.ctx.fillRect(this.startX, this.startY, width, height) 
+            this.ctx.strokeRect(this.startX, this.startY, width, height) 
             // this.ctx.strokeRect(this.startX, this.startY, width, height) 
             } else if (this.selectedTool === "circle"){
                 const radius = Math.sqrt(
                     Math.pow(width, 2) + 
                     Math.pow(height, 2)
                 )
+                this.ctx.strokeStyle = `${this.selecteColor}` 
 
                 this.ctx.beginPath()
                 this.ctx.arc(this.startX, this.startY, radius, 0, Math.PI * 2)
                 // this.ctx.fill()  //=> to fill the color in circle 
-                // this.ctx.stroke()
-                this.ctx.fill()
+                this.ctx.stroke()
+                // this.ctx.fill()
             } else if (this.selectedTool === "pencil"){
+                this.ctx.strokeStyle = `${this.selecteColor}` 
                 this.ctx.beginPath()
                 this.ctx.moveTo(this.startX, this.startY)
                 this.ctx.lineTo(e.clientX, e.clientY)
+                // this.drawArrow(this.ctx, this.startX, this.startY, e.clientX, e.clientY, 10)
                 this.ctx.stroke()
             }
         } 
@@ -184,7 +193,8 @@ export class GameClass{
                 startX : this.startX,
                 startY : this.startY,
                 endX : e.clientX,
-                endY : e.clientY
+                endY : e.clientY,
+                style : `${this.selecteColor}`
             }
         }
 
@@ -247,7 +257,7 @@ export class GameClass{
         this.textArea = document.createElement("textarea")
         this.textArea.style.border = "none"
         this.textArea.style.outline = "none"
-        this.textArea.style.color = "white"
+        this.textArea.style.color = `${this.selecteColor}`
         this.textArea.style.resize = "none"
         this.textArea.style.position = "absolute"
         this.textArea.style.top = `${y}px`
@@ -274,7 +284,8 @@ export class GameClass{
                     type : "text",
                     content : text,
                     startX : x,
-                    startY : y
+                    startY : y,
+                    style : `${this.selecteColor}`
                 }
 
                 this.existingShapes.push(textObject)
@@ -292,4 +303,38 @@ export class GameClass{
 
 
     }
+
+    // private drawArrow(ctx : CanvasRenderingContext2D, startX : number, startY : number, endX : number, endY : number, arrowSize : number){
+
+    //     ctx.beginPath();
+    //     ctx.moveTo(startX, startY);
+    //     ctx.lineTo(endX, endY);
+    //     ctx.stroke();
+        
+    //     const angle = Math.atan2(endX - startX, endY - startY) // angle b/w x axis and line
+
+
+    //     // base point calculation ( behind the tip end )
+    //     const baseX = arrowSize * Math.cos(angle) + endX  
+    //     const baseY = arrowSize * Math.sin(angle) + endY
+
+    //     ctx.beginPath()
+
+        
+
+    //     ctx.moveTo(endX, endY)
+
+    //     const wingAngle = Math.PI / 6
+    //     const wing1X = endX - arrowSize * Math.cos(angle + wingAngle);
+    // const wing1Y = endY - arrowSize * Math.sin(angle + wingAngle);
+    // const wing2X = endX - arrowSize * Math.cos(angle - wingAngle);
+    // const wing2Y = endY - arrowSize * Math.sin(angle - wingAngle);
+
+    // ctx.lineTo(wing1X, wing1Y);
+    // ctx.lineTo(wing2X, wing2Y);
+    // ctx.closePath();
+    // ctx.fill();
+
+        
+    // } 
 }

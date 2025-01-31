@@ -72,7 +72,7 @@ export default function MainCanvas({roomId, ws} : {
         <div className="flex flex-row gap-2 bg-[#232329] p-3 rounded-lg">
           <button
             className={`p-1 rounded-md cursor-pointer ${
-              selectedtool === "circle" ? "bg-blue-600" : "bg-gray-200 hover:bg-slate-400"
+              selectedtool === "circle" ? "bg-[#403e6a]" : "null hover:bg-slate-400"
             }`}
             onClick={() => setselectedtool("circle")}
           >
@@ -80,7 +80,7 @@ export default function MainCanvas({roomId, ws} : {
           </button>
           <button
             className={`p-1 rounded-md cursor-pointer ${
-              selectedtool === "rect" ? "bg-blue-600" : "bg-gray-200 hover:bg-slate-400"
+              selectedtool === "rect" ? "bg-[#403e6a]" : "null hover:bg-slate-400"
             }`}
             onClick={() => setselectedtool("rect")}
           >
@@ -88,7 +88,7 @@ export default function MainCanvas({roomId, ws} : {
           </button>
           <button
             className={`p-1 rounded-md cursor-pointer ${
-              selectedtool === "pencil" ? "bg-blue-600" : "bg-gray-200 hover:bg-slate-400"
+              selectedtool === "pencil" ? "bg-[#403e6a]" : "null hover:bg-slate-400"
             }`}
             onClick={() => setselectedtool("pencil")}
           >
@@ -96,7 +96,7 @@ export default function MainCanvas({roomId, ws} : {
           </button>
           <button
             className={`p-1 rounded-md cursor-pointer ${
-              selectedtool === "text" ? "bg-blue-600" : "bg-gray-200 hover:bg-slate-400"
+              selectedtool === "text" ? "bg-[#403e6a]" : "null hover:bg-slate-400"
             }`}
             onClick={() => setselectedtool("text")}
           >
@@ -105,26 +105,37 @@ export default function MainCanvas({roomId, ws} : {
         </div>
       </div>
       
-      <div className='bg-[#232329] top-20 left-5 py-3 px-4 rounded-md  z-20 absolute gap-2.5 flex flex-col'>
+      <div className='bg-[#232329] top-20 left-5 py-3 px-4 rounded-md  z-20 absolute gap-2.5 flex flex-row'>
+        <h1>stroke</h1>
         <button 
         onClick={() => setBgcolor("blue")}
-            className={`${bgcolor === "blue" ? "bg-blue-600" : "bg-gray-200"} rounded-md px-2 `}
-          >blue
+            // className={`${bgcolor === "blue" ? "bg-red-200" : ""} rounded-md px-2 `}
+            className={`${bgcolor === "blue" ? "outline-2 outline-[#b6b6c3]" : "outline-0"} bg-blue-600 rounded-md`}
+          >
+            <div className='w-7 h-5'>
+              
+            </div>
         </button>
         <button 
         onClick={() => setBgcolor("red")}
-            className={`${bgcolor === "red" ? "bg-red-600" : "bg-gray-200"} rounded-md px-2 `}
-          >red
+            className={`${bgcolor === "red" ? "outline-2 outline-[#b6b6c3]" : "null"} bg-red-600 rounded-md `}
+          >
+            <div className='w-7 h-5'>
+              
+            </div>
         </button>
         <button 
         onClick={() => setBgcolor("yellow")}
-            className={`${bgcolor === "yellow"  ? "bg-yellow-600" : "bg-gray-200"} rounded-md px-2`}
-          >yellow
+            className={`${bgcolor === "yellow"  ? "outline-2 outline-[#b6b6c3]" : "null"} bg-yellow-400 rounded-md`}
+          >
+            <div className='w-7 h-5'>
+
+            </div>
         </button>
       </div>
       
       <canvas
-        className="absolute top-0 left-0 w-full h-full bg-black"
+        className="absolute top-0 left-0 w-full h-full bg-[#111011]"
         ref={canvasRef}
         width={window.innerWidth}
         height={window.innerHeight}
