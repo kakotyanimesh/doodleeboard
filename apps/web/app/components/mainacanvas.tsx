@@ -1,6 +1,6 @@
-"use client"
+"use client" 
 
-import { Circle,RectangleHorizontal, PencilLine, Baseline } from 'lucide-react';
+import { Circle,RectangleHorizontal, PencilLine, Baseline, Eraser } from 'lucide-react';
 import { useEffect, useRef, useState } from "react"
 import { Game } from "../../draw/game"
 import { matchesGlob } from "path"
@@ -101,6 +101,14 @@ export default function MainCanvas({roomId, ws} : {
             onClick={() => setselectedtool("text")}
           >
             <Baseline />
+          </button>
+          <button
+            className={`p-1 rounded-md cursor-pointer ${
+              selectedtool === "eraser" ? "bg-[#403e6a]" : "null hover:bg-slate-400"
+            }`}
+            onClick={() => setselectedtool("eraser")}
+          >
+            <Eraser  />
           </button>
         </div>
       </div>

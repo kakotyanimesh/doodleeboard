@@ -26,7 +26,7 @@ export type ShapesType = {
     style : string
 }
 
-export type selectedToolType = "rect" | "circle" | "pencil" | "text"
+export type selectedToolType = "rect" | "circle" | "pencil" | "text" | "eraser"
 
 // export type styleType = {
 //     fillColor ? : string,

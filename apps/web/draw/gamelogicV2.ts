@@ -150,6 +150,8 @@ export class GameClass{
                 this.ctx.lineTo(e.clientX, e.clientY)
                 // this.drawArrow(this.ctx, this.startX, this.startY, e.clientX, e.clientY, 10)
                 this.ctx.stroke()
+            } else if (this.selectedTool === "eraser"){
+                this.ctx.clearRect(this.startX, this.startY, e.clientX, e.clientY)
             }
         } 
     }
